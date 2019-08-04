@@ -1,0 +1,3 @@
+<div class="bombs-area" cdkDropList [cdkDropListData]="bombSettings" (cdkDropListDropped)="onBombDrop($event)">
+    <app-bomb  *ngFor="let bombSetting of bombSettings" cdkDrag></app-bomb>
+</div>
