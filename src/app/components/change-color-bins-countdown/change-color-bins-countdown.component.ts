@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ManagerGame } from '../../core/services/manager-game.service';
 import { Subscription } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './change-color-bins-countdown.component.html',
   styleUrls: ['./change-color-bins-countdown.component.scss']
 })
-export class ChangeColorBinsCountdownComponent implements OnInit {
+export class ChangeColorBinsCountdownComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   time: number = this.managerGame.startedCountdownTime;
 
@@ -21,6 +21,11 @@ export class ChangeColorBinsCountdownComponent implements OnInit {
       })
 
     );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(item => item.unsubscribe());
+    this.subscriptions = [];
   }
 }
 

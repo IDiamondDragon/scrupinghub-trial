@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { BombSettings } from '../../models/classes/bomb-settings';
 
 
 @Injectable()
 export class ManagerGame {
+    points: number = 0;
+    bombsInBins: BombSettings[] = [];
+
     timerId;
     stepTimerInMSec: number = 500; // in msec
     stepTimer: number = this.stepTimerInMSec / 1000;
@@ -81,7 +85,19 @@ export class ManagerGame {
        clearInterval(this.timerId);
     }
 
-    public updateBombsColor() {
+    updateBombsColor() {
       this._changeColorBombs.next(true);
+    }
+
+    removeBomb(bomb: BombSettings, layIntoRightBin?: boolean) {
+      if (layIntoRightBin) {
+        this.points += 1;
+      }
+
+      const isBombInBins = this.bombsInBins.includes(bomb);
+
+      if (!isBombInBins) {
+        this.points -= 1;
+      }
     }
 }

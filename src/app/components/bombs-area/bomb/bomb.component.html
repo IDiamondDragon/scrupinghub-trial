@@ -1,3 +1,3 @@
-<div class="bomb" [ngStyle]="{'background-color': bombSettings.color}">
-
+<div class="bomb" [ngStyle]="{'background-color': bombSettings.color}" [class.hide]="hide">
+  <div class="time">{{ time }} sec</div>
 </div>

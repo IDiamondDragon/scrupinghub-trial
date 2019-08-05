@@ -4,6 +4,7 @@ import { ColorGeneratorService } from '../../../core/services/color-generator.se
 import { BombSettings } from '../../../models/classes/bomb-settings';
 import { ManagerGame } from 'src/app/core/services/manager-game.service';
 import { Subscription } from 'rxjs';
+import { RandomValueGeneratorService } from '../../../core/services/random-value-generator.service';
 
 @Component({
   selector: 'app-bomb',
@@ -21,13 +22,18 @@ export class BombComponent implements OnInit  {
   @Input()
     index: number;
 
-  protected color: string;
   private subscriptions: Subscription[] = [];
+  private idInterval = null;
+  color: string;
+  time: number;
+  hide: boolean = false;
+
 
   constructor(private positionService: PositionService,
               private colorGeneratorService: ColorGeneratorService,
-              private managerGame: ManagerGame) {
-
+              private managerGame: ManagerGame,
+              randomValueGeneratorService: RandomValueGeneratorService) {
+    this.time = randomValueGeneratorService.getRandomValue(5, 11);
   }
 
   ngOnInit() {
@@ -38,6 +44,19 @@ export class BombComponent implements OnInit  {
       })
 
     )
+
+    this.idInterval = setInterval(this.timer.bind(this), 1000);
+  }
+
+  private timer() {
+    this.time -= 1;
+
+    if (this.time === 0) {
+      this.managerGame.removeBomb(this.bombSettings, false);
+
+      clearInterval(this.idInterval);
+      this.hide = true;
+    }
   }
 
   ngOnDestroy() {

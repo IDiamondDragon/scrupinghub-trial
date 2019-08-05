@@ -41,6 +41,15 @@ export class BinComponent implements OnInit, OnDestroy {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      const bomb: BombSettings = event.previousContainer.data[event.previousIndex];
+
+      if (this.color === bomb.color) {
+        this.managerGame.bombsInBins.push(bomb);
+        this.managerGame.removeBomb(bomb, true);
+      } else {
+        this.managerGame.removeBomb(bomb, false);
+      }
+
       transferArrayItem(event.previousContainer.data,
         event.container.data,
         event.previousIndex,
