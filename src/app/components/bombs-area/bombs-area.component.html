@@ -1,3 +1,25 @@
-<div class="bombs-area" cdkDropList [cdkDropListData]="bombSettings" (cdkDropListDropped)="onBombDrop($event)">
-    <app-bomb  *ngFor="let bombSetting of bombSettings" cdkDrag></app-bomb>
+<div class="bombs-area"
+     id="bombs-area"
+     cdkDropList
+     [cdkDropListSortingDisabled]="true"
+     [cdkDropListData]="bombSettings"
+     (cdkDropListDropped)="onBombDrop($event)"
+     [cdkDropListConnectedTo]="['bin1', 'bin2', 'bin3', 'bin4', 'bin5']">
+
+    <app-bomb  *ngFor="let bombSetting of bombSettings; let i = index"
+               cdkDrag
+               [bombSettings]="bombSetting"
+               [index]="i"
+               [cdkDragData]="bombSetting">
+    </app-bomb>
+
+
 </div>
+<!-- <div id="bin4"
+     class="bin4"
+     cdkDropList
+     (cdkDropListDropped)="onBombDrop($event)"
+
+     [cdkDropListConnectedTo]="['bombs-area']">
+
+</div> -->

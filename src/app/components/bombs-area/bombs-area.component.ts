@@ -14,7 +14,7 @@ export class BombsAreaComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public bombSettings: BombSettings[] = [];
 
-  constructor(private managerGame: ManagerGame, private bombSettingsCreatorService: BombSettingsCreatorService) { }
+  constructor(protected managerGame: ManagerGame, private bombSettingsCreatorService: BombSettingsCreatorService) { }
 
   ngOnInit() {
     this.subscriptions.push(

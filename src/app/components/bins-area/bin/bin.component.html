@@ -1,0 +1,9 @@
+<div [id]="id"
+     class="bin"
+     cdkDropList
+     [cdkDropListData]="bombs"
+     (cdkDropListDropped)="onBombDrop($event)"
+     [ngStyle]="{'background-color': color}"
+     [cdkDropListConnectedTo]="['bombs-area']">
+
+</div>

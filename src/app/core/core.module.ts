@@ -6,7 +6,7 @@ import { ManagerGame } from './services/manager-game.service';
 import { RandomValueGeneratorService } from './services/random-value-generator.service';
 import { ColorGeneratorService } from './services/color-generator.service';
 import { BombSettingsCreatorService } from './services/bomb-settings-creator.service';
-import { GuidGeneratorService } from './services/guid-generator.service copy';
+import { GuidGeneratorService } from './services/guid-generator.service';
 
 @NgModule({
   providers: [
