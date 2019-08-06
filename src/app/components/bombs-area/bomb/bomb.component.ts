@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, Input } from '@angular/core';
+import { Component, OnInit, HostBinding, Input, ChangeDetectorRef } from '@angular/core';
 import { PositionService } from '../../../core/services/position.service';
 import { ColorGeneratorService } from '../../../core/services/color-generator.service';
 import { BombSettings } from '../../../models/classes/bomb-settings';
@@ -32,7 +32,8 @@ export class BombComponent implements OnInit  {
   constructor(private positionService: PositionService,
               private colorGeneratorService: ColorGeneratorService,
               private managerGame: ManagerGame,
-              randomValueGeneratorService: RandomValueGeneratorService) {
+              randomValueGeneratorService: RandomValueGeneratorService,
+              private cdr: ChangeDetectorRef) {
     this.time = randomValueGeneratorService.getRandomValue(5, 11);
   }
 
@@ -41,6 +42,7 @@ export class BombComponent implements OnInit  {
 
       this.managerGame.changeColorBombs.subscribe(value => {
         this.bombSettings.color = this.colorGeneratorService.getRandomColorFrom(this.managerGame.colorBins);
+        this.cdr.detectChanges();
       })
 
     )

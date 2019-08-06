@@ -20,11 +20,16 @@ export class ManagerGame {
     passedCountdownTime: number = this.startedCountdownTime;
     colorBins: string[] = [];
     idBins: string[] = ['bin1', 'bin2', 'bin3'];
+    countEmitedBombs = 0;
+    countEmitedBombsFinishGame = 120;
 
     private _emitBomb = new BehaviorSubject<boolean>(false);
     private _currentCountdownTime = new BehaviorSubject<number>(this.startedCountdownTime);
     private _changeColorBins = new BehaviorSubject<boolean>(true);
     private _changeColorBombs = new BehaviorSubject<boolean>(true);
+    private _currentPoints = new BehaviorSubject<number>(0);
+    private _stoppedGame = new BehaviorSubject<boolean>(false);
+    private _settedBaseSizeBins = new BehaviorSubject<boolean>(false);
 
     public get emitBomb(): Observable<boolean> {
       return this._emitBomb;
@@ -38,10 +43,22 @@ export class ManagerGame {
       return this._changeColorBins;
     }
 
-
     public get changeColorBombs(): Observable<boolean> {
       return this._changeColorBombs;
     }
+
+    public get currentPoints(): Observable<number> {
+      return this._currentPoints;
+    }
+
+    public get stoppedGame(): Observable<boolean> {
+      return this._stoppedGame;
+    }
+
+    public get settedBaseSizeBins(): Observable<boolean> {
+      return this._settedBaseSizeBins;
+    }
+
 
     constructor() {
       this.startGame();
@@ -52,18 +69,20 @@ export class ManagerGame {
       this.passedTimeEmitBomb += this.stepTimer;
       this.passedCountdownTime -= this.stepTimer;
 
-      if (this.passedTimeGame === this.durationGame) {
+      if (this.countEmitedBombs === this.countEmitedBombsFinishGame) {
         this.stopGame();
+        return;
       }
 
-      if (this.passedTimeGame % 12 === 0) {
+      if (this.passedTimeGame % 12 === 0 && this.emitBombEvery !== this.stepTimer) {
         this.emitBombEvery -= this.stepTimer;
       }
 
-      if (this.passedTimeEmitBomb >= this.emitBombEvery) {
+      if (this.passedTimeEmitBomb >= this.emitBombEvery && this.countEmitedBombs < this.countEmitedBombsFinishGame) {
         this._emitBomb.next(true);
 
         this.passedTimeEmitBomb = 0;
+        this.countEmitedBombs += 1;
       }
 
       if (this.passedCountdownTime % 1 === 0) {
@@ -83,10 +102,16 @@ export class ManagerGame {
 
     stopGame() {
        clearInterval(this.timerId);
+       this._currentCountdownTime.next(0);
+       this._stoppedGame.next(true);
     }
 
     updateBombsColor() {
       this._changeColorBombs.next(true);
+    }
+
+    setBaseSizeBins() {
+      this._settedBaseSizeBins.next(true);
     }
 
     removeBomb(bomb: BombSettings, layIntoRightBin?: boolean) {
@@ -99,5 +124,7 @@ export class ManagerGame {
       if (!isBombInBins) {
         this.points -= 1;
       }
+
+      this._currentPoints.next(this.points);
     }
 }

@@ -9,17 +9,11 @@
     <app-bomb  *ngFor="let bombSetting of bombSettings; let i = index"
                cdkDrag
                [bombSettings]="bombSetting"
+               (cdkDragMoved)="dragMoved($event)"
+               (cdkDragEnded)="dragEnded($event)"
                [index]="i"
                [cdkDragData]="bombSetting">
     </app-bomb>
 
 
 </div>
-<!-- <div id="bin4"
-     class="bin4"
-     cdkDropList
-     (cdkDropListDropped)="onBombDrop($event)"
-
-     [cdkDropListConnectedTo]="['bombs-area']">
-
-</div> -->

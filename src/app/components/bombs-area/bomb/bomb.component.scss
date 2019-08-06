@@ -1,13 +1,59 @@
 .bomb {
+  position: relative;
   width: 40px;
   height: 40px;
-  background-color: black;
+  background-color: transparent;
 
   .time {
+    top: 16px;
+    left: 8px;
+    position: absolute;
     padding-top: 12px;
     text-align: center;
     color: white;
     font-size: 13px;
+    white-space:nowrap;
+  }
+
+  .fa-bomb {
+    font-size: 55px;
+    animation: fontbulger 1s infinite;
+  }
+
+  @keyframes fontbulger {
+    0% {
+      font-size: 55px;
+    }
+    10% {
+      font-size: 56px;
+    }
+    20% {
+      font-size: 57px;
+    }
+    30% {
+      font-size: 56px;
+    }
+    40% {
+      font-size: 55px;
+    }
+    50% {
+      font-size: 56px;
+    }
+    60% {
+      font-size: 57px;
+    }
+    70% {
+      font-size: 56px;
+    }
+    80% {
+      font-size: 55px;
+    }
+    90% {
+      font-size: 56px;
+    }
+    100% {
+      font-size: 55px;
+    }
   }
 }
 

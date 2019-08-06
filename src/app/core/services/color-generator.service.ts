@@ -4,7 +4,7 @@ import { RandomValueGeneratorService } from './random-value-generator.service';
 
 @Injectable()
 export class ColorGeneratorService {
-    private colors: string[] = ['red', 'green', 'black', 'blue', 'yellow'];
+    private colors: string[] = ['red', 'green', 'black', 'blue', 'orange', 'pink'];
 
     constructor(private randomValueGeneratorService: RandomValueGeneratorService) {
     }

@@ -7,25 +7,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './change-color-bins-countdown.component.html',
   styleUrls: ['./change-color-bins-countdown.component.scss']
 })
-export class ChangeColorBinsCountdownComponent implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
-  time: number = this.managerGame.startedCountdownTime;
-
+export class ChangeColorBinsCountdownComponent {
   constructor(private managerGame: ManagerGame) { }
-
-  ngOnInit() {
-    this.subscriptions.push(
-
-      this.managerGame.currentCountdownTime.subscribe(value => {
-        this.time = value;
-      })
-
-    );
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach(item => item.unsubscribe());
-    this.subscriptions = [];
-  }
 }
 

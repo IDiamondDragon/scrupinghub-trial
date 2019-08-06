@@ -15,6 +15,7 @@ export class BinComponent implements OnInit, OnDestroy {
   id: string;
 
   color: string;
+  increaseSizeBin: boolean;
 
   public bombs: BombSettings[] = [];
   private subscriptions: Subscription[] = [];
@@ -32,6 +33,13 @@ export class BinComponent implements OnInit, OnDestroy {
 
         if (this.managerGame.colorBins.length === this.managerGame.idBins.length) {
           this.managerGame.updateBombsColor();
+        }
+      }),
+
+      this.managerGame.settedBaseSizeBins.subscribe(value => {
+
+        if (value) {
+          this.increaseSizeBin = false;
         }
       })
     );
@@ -58,8 +66,12 @@ export class BinComponent implements OnInit, OnDestroy {
   }
 
   /** Predicate function that only allows even numbers to be dropped into a list. */
-  evenPredicate(item: CdkDrag<number>) {
-    //debugger;
+  colorPredicate(item: CdkDrag<BombSettings>) {
+
+    if (item.data.color === this.color) {
+      this.increaseSizeBin = true;
+    }
+
     return true;
   }
 

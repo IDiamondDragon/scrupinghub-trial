@@ -1,5 +1,11 @@
-<div class="game">
+<app-points-counter></app-points-counter>
+<ng-template class="game" #game>
   <app-bombs-area></app-bombs-area>
   <app-bins-area></app-bins-area>
+</ng-template>
+<div class="message" *ngIf="this.stoppedGame; else game">
+  Game End
 </div>
 <app-change-color-bins-countdown></app-change-color-bins-countdown>
+
+

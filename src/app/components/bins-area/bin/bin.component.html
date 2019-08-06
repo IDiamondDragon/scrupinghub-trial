@@ -1,9 +1,15 @@
 <div [id]="id"
      class="bin"
+     [ngStyle]="{'color': color}"
      cdkDropList
      [cdkDropListData]="bombs"
      (cdkDropListDropped)="onBombDrop($event)"
-     [ngStyle]="{'background-color': color}"
-     [cdkDropListConnectedTo]="['bombs-area']">
+     [cdkDropListConnectedTo]="['bombs-area']"
+     [cdkDropListEnterPredicate]="colorPredicate.bind(this)"
+     [ngClass]="{'bin--increased' : increaseSizeBin}">
 
+     <i class="fa fa-archive"
+        [ngStyle]="{'color': color}"
+        [ngClass]="{'fa-archive--increased' : increaseSizeBin}"
+        ></i>
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDragMove } from '@angular/cdk/drag-drop';
 import { BombSettings } from 'src/app/models/classes/bomb-settings';
 import { ManagerGame } from 'src/app/core/services/manager-game.service';
 import { BombSettingsCreatorService } from '../../core/services/bomb-settings-creator.service';
@@ -19,7 +19,11 @@ export class BombsAreaComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
 
-      this.managerGame.emitBomb.subscribe(value => {
+      this.managerGame.emitBomb.subscribe((value: boolean) => {
+        if (value === false) {
+          return;
+        }
+
         this.bombSettings.push(this.bombSettingsCreatorService.create());
       })
 
@@ -35,6 +39,15 @@ export class BombsAreaComponent implements OnInit, OnDestroy {
         event.previousIndex,
         event.currentIndex);
     }
+  }
+
+  dragMoved(event: CdkDragMove) {
+   //let position = `> Position X: ${event.pointerPosition.x} - Y: ${event.pointerPosition.y}`;
+   //event.source.data.color = 'red';
+  }
+
+  dragEnded(event: CdkDragMove) {
+    this.managerGame.setBaseSizeBins();
   }
 
   ngOnDestroy() {

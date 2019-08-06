@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChangeColorBinsCountdownComponent } from './components/change-color-bins-countdown/change-color-bins-countdown.component';
 import { BinsAreaComponent } from './components/bins-area/bins-area.component';
 import { BinComponent } from './components/bins-area/bin/bin.component';
+import { PointsCounterComponent } from './components/points-counter/points-counter.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { BinComponent } from './components/bins-area/bin/bin.component';
     BombComponent,
     ChangeColorBinsCountdownComponent,
     BinsAreaComponent,
-    BinComponent
+    BinComponent,
+    PointsCounterComponent
   ],
   imports: [
     BrowserModule,
