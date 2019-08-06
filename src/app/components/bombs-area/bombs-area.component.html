@@ -13,7 +13,11 @@
                (cdkDragEnded)="dragEnded($event)"
                [index]="i"
                [cdkDragData]="bombSetting">
+
+        <!-- <div *cdkDragPreview [id]="bombSetting.id" class="bomb" [class.hide]="hide">
+          <i class="fa fa-bomb" [ngStyle]="{'color': bombSettings.color}" aria-hidden="true">
+            <div class="time"></div>
+          </i>
+        </div> -->
     </app-bomb>
-
-
 </div>

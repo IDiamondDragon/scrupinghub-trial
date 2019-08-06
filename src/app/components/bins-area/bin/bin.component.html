@@ -1,6 +1,6 @@
 <div [id]="id"
      class="bin"
-     [ngStyle]="{'color': color}"
+     [ngStyle]="{'color': color, 'boxShadow': increaseSizeBin ? coloredBoxShadow : defaultBoxShadow }"
      cdkDropList
      [cdkDropListData]="bombs"
      (cdkDropListDropped)="onBombDrop($event)"

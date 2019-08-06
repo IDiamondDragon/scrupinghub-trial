@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-bombs-area',
   templateUrl: './bombs-area.component.html',
-  styleUrls: ['./bombs-area.component.scss']
+  styleUrls: ['./bombs-area.component.scss', './bomb/bomb.component.scss']
 })
 export class BombsAreaComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

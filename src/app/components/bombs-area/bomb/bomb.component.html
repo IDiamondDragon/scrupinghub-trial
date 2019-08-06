@@ -1,5 +1,5 @@
-<div class="bomb" [class.hide]="hide">
+<div class="bomb" [ngClass]="[bombSettings.id]" [class.hide]="hide">
   <i class="fa fa-bomb" [ngStyle]="{'color': bombSettings.color}" aria-hidden="true">
-    <div class="time">{{ time }} sec</div>
+    <div   class="time">{{ time }} sec</div>
   </i>
 </div>

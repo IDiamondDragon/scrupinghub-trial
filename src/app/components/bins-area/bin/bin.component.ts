@@ -16,11 +16,13 @@ export class BinComponent implements OnInit, OnDestroy {
 
   color: string;
   increaseSizeBin: boolean;
-
+  defaultBoxShadow: string;
+  coloredBoxShadow: string;
   public bombs: BombSettings[] = [];
   private subscriptions: Subscription[] = [];
 
-  constructor(protected managerGame: ManagerGame, protected colorGeneratorService: ColorGeneratorService) { }
+  constructor(protected managerGame: ManagerGame, protected colorGeneratorService: ColorGeneratorService) {
+  }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -34,6 +36,10 @@ export class BinComponent implements OnInit, OnDestroy {
         if (this.managerGame.colorBins.length === this.managerGame.idBins.length) {
           this.managerGame.updateBombsColor();
         }
+
+        this.coloredBoxShadow = '0 5px 5px -3px ' + this.colorGeneratorService.hexToRgbNew(this.color, '0.3')  +
+          ', 0 8px 10px 1px ' + this.colorGeneratorService.hexToRgbNew(this.color, '0.3')  +
+          ', 0 3px 14px 2px '  + this.colorGeneratorService.hexToRgbNew(this.color, '0.3');
       }),
 
       this.managerGame.settedBaseSizeBins.subscribe(value => {
@@ -43,6 +49,11 @@ export class BinComponent implements OnInit, OnDestroy {
         }
       })
     );
+
+    this.defaultBoxShadow = '0 5px 5px -3px rgba(143, 125, 125, 0.264), 0 8px 10px 1px rgba(143, 125, 125, 0.664), 0 3px 14px 2px rgba(143, 125, 125, 0.564)';
+    this.coloredBoxShadow = '0 5px 5px -3px ' + this.colorGeneratorService.hexToRgbNew(this.color, '0.3')  +
+                            ', 0 8px 10px 1px ' + this.colorGeneratorService.hexToRgbNew(this.color, '0.3')  +
+                             ', 0 3px 14px 2px '  + this.colorGeneratorService.hexToRgbNew(this.color, '0.3');
   }
 
   onBombDrop(event: CdkDragDrop<any[]>) {

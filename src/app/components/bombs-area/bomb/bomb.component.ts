@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, HostBinding, Input, ChangeDetectorRef, Renderer2, OnDestroy } from '@angular/core';
 import { PositionService } from '../../../core/services/position.service';
 import { ColorGeneratorService } from '../../../core/services/color-generator.service';
 import { BombSettings } from '../../../models/classes/bomb-settings';
@@ -11,7 +11,7 @@ import { RandomValueGeneratorService } from '../../../core/services/random-value
   templateUrl: './bomb.component.html',
   styleUrls: ['./bomb.component.scss']
 })
-export class BombComponent implements OnInit  {
+export class BombComponent implements OnInit, OnDestroy  {
 
   @HostBinding('style.grid-area')
     cell: string = this.positionService.getRandomCell();
@@ -33,7 +33,8 @@ export class BombComponent implements OnInit  {
               private colorGeneratorService: ColorGeneratorService,
               private managerGame: ManagerGame,
               randomValueGeneratorService: RandomValueGeneratorService,
-              private cdr: ChangeDetectorRef) {
+              private cdr: ChangeDetectorRef,
+              private renderer: Renderer2) {
     this.time = randomValueGeneratorService.getRandomValue(5, 11);
   }
 
@@ -53,11 +54,24 @@ export class BombComponent implements OnInit  {
   private timer() {
     this.time -= 1;
 
+    const elementsBomb = document.querySelectorAll('.' + this.bombSettings.id);
+    const elementsTimesBomb = document.querySelectorAll('.' + this.bombSettings.id + ' .time');
+    const previewTimeBomb =   elementsTimesBomb.item(2);
+    const previewBomb =   elementsBomb.item(2);
+
+    if (previewTimeBomb) {
+      this.renderer.setProperty(previewTimeBomb, 'innerText', this.time + ' sec');
+    }
+
     if (this.time === 0) {
       this.managerGame.removeBomb(this.bombSettings, false);
 
       clearInterval(this.idInterval);
       this.hide = true;
+
+      if (previewBomb) {
+        this.renderer.setStyle(previewBomb, 'display', 'none');
+      }
     }
   }
 
