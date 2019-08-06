@@ -6,6 +6,8 @@
      (cdkDropListDropped)="onBombDrop($event)"
      [cdkDropListConnectedTo]="['bombs-area']"
      [cdkDropListEnterPredicate]="colorPredicate.bind(this)"
+     cdkDropListSortingDisabled="true"
+     cdkDropListAutoScrollDisabled="true"
      [ngClass]="{'bin--increased' : increaseSizeBin}">
 
      <i class="fa fa-archive"
