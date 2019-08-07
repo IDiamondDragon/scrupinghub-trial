@@ -5,8 +5,9 @@ import { RandomValueGeneratorService } from './random-value-generator.service';
 @Injectable()
 export class ColorGeneratorService {
     private colors: string[] = ['#FF0000', '#1EBE1E', '#000000', '#0000FF', '#FF681F', '#FFC0CB'];
+    colorBins: string[] = [];
 
-    constructor(private randomValueGeneratorService: RandomValueGeneratorService) {
+    constructor(private randomValueGeneratorService: RandomValueGeneratorService,) {
     }
 
      getColor(): string {
@@ -38,11 +39,6 @@ export class ColorGeneratorService {
       });
 
       const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-      // return result ? {
-      //   r: parseInt(result[1], 16),
-      //   g: parseInt(result[2], 16),
-      //   b: parseInt(result[3], 16)
-      // } : null;
 
       if (result) {
 

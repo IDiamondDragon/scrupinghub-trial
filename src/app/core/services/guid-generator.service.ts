@@ -7,7 +7,6 @@ export class GuidGeneratorService {
     }
 
     guid() {
-
       return 'class' + (new Date().getTime()).toString(36);
     }
 }

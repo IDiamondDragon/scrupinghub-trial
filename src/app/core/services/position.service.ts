@@ -5,7 +5,6 @@ import { RandomValueGeneratorService } from './random-value-generator.service';
 @Injectable()
 export class PositionService {
 
-
     constructor(private randomValueGeneratorService: RandomValueGeneratorService) {
     }
 

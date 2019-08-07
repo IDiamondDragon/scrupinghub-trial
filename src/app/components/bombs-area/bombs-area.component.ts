@@ -4,6 +4,9 @@ import { BombSettings } from 'src/app/models/classes/bomb-settings';
 import { ManagerGame } from 'src/app/core/services/manager-game.service';
 import { BombSettingsCreatorService } from '../../core/services/bomb-settings-creator.service';
 import { Subscription } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { State } from '../../reducers/index';
+import { emitBomb } from '../../reducers/app.selectors';
 
 @Component({
   selector: 'app-bombs-area',
@@ -14,23 +17,25 @@ export class BombsAreaComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public bombSettings: BombSettings[] = [];
 
-  constructor(protected managerGame: ManagerGame, private bombSettingsCreatorService: BombSettingsCreatorService) { }
+  constructor(protected managerGame: ManagerGame,
+              private store: Store<State>) { }
 
   ngOnInit() {
     this.subscriptions.push(
 
-      this.managerGame.emitBomb.subscribe((value: boolean) => {
-        if (value === false) {
+        this.store.pipe(select(emitBomb)).subscribe((bombSettings: BombSettings) => {
+
+        if (bombSettings === null) {
           return;
         }
 
-        this.bombSettings.push(this.bombSettingsCreatorService.create());
+        this.bombSettings.push(bombSettings);
       })
 
     );
   }
 
-  onBombDrop(event: CdkDragDrop<any[]>) {
+  onBombDrop(event: CdkDragDrop<BombSettings[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -42,11 +47,9 @@ export class BombsAreaComponent implements OnInit, OnDestroy {
   }
 
   dragMoved(event: CdkDragMove) {
-   //let position = `> Position X: ${event.pointerPosition.x} - Y: ${event.pointerPosition.y}`;
-   //event.source.data.color = 'red';
   }
 
-  dragEnded(event: CdkDragMove) {
+  dragEnded(event: CdkDragMove<BombSettings>) {
     this.managerGame.setBaseSizeBins();
   }
 

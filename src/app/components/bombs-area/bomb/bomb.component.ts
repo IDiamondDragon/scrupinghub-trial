@@ -5,6 +5,8 @@ import { BombSettings } from '../../../models/classes/bomb-settings';
 import { ManagerGame } from 'src/app/core/services/manager-game.service';
 import { Subscription } from 'rxjs';
 import { RandomValueGeneratorService } from '../../../core/services/random-value-generator.service';
+import { Store, select } from '@ngrx/store';
+import { State } from '../../../reducers/index';
 
 @Component({
   selector: 'app-bomb',
@@ -34,7 +36,8 @@ export class BombComponent implements OnInit, OnDestroy  {
               private managerGame: ManagerGame,
               randomValueGeneratorService: RandomValueGeneratorService,
               private cdr: ChangeDetectorRef,
-              private renderer: Renderer2) {
+              private renderer: Renderer2,
+              private store: Store<State>) {
     this.time = randomValueGeneratorService.getRandomValue(5, 11);
   }
 
@@ -42,7 +45,8 @@ export class BombComponent implements OnInit, OnDestroy  {
     this.subscriptions.push(
 
       this.managerGame.changeColorBombs.subscribe(value => {
-        this.bombSettings.color = this.colorGeneratorService.getRandomColorFrom(this.managerGame.colorBins);
+        this.bombSettings.color = this.colorGeneratorService.getRandomColorFrom(this.colorGeneratorService.colorBins);
+        console.log("Bomb settings :" + this.bombSettings.color);
         this.cdr.detectChanges();
       })
 

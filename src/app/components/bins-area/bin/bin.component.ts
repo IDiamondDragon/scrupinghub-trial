@@ -4,6 +4,8 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDrag } from '@angul
 import { ManagerGame } from '../../../core/services/manager-game.service';
 import { Subscription } from 'rxjs';
 import { ColorGeneratorService } from '../../../core/services/color-generator.service';
+import { Store, select } from '@ngrx/store';
+import { State } from '../../../reducers/index';
 
 @Component({
   selector: 'app-bin',
@@ -21,19 +23,22 @@ export class BinComponent implements OnInit, OnDestroy {
   public bombs: BombSettings[] = [];
   private subscriptions: Subscription[] = [];
 
-  constructor(protected managerGame: ManagerGame, protected colorGeneratorService: ColorGeneratorService) {
+  constructor(protected managerGame: ManagerGame,
+              protected colorGeneratorService: ColorGeneratorService,
+              private store: Store<State>) {
   }
 
   ngOnInit() {
     this.subscriptions.push(
-      this.managerGame.changeColorBins.subscribe(value => {
-        const color = this.colorGeneratorService.getRandomColorExcept(this.managerGame.colorBins);
 
-        this.managerGame.colorBins.push(color);
+      this.managerGame.changeColorBins.subscribe(value => {
+        const color = this.colorGeneratorService.getRandomColorExcept(this.colorGeneratorService.colorBins);
+
+        this.colorGeneratorService.colorBins.push(color);
 
         this.color = color;
 
-        if (this.managerGame.colorBins.length === this.managerGame.idBins.length) {
+        if (this.colorGeneratorService.colorBins.length === this.managerGame.idBins.length) {
           this.managerGame.updateBombsColor();
         }
 
@@ -61,7 +66,8 @@ export class BinComponent implements OnInit, OnDestroy {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       const bomb: BombSettings = event.previousContainer.data[event.previousIndex];
-
+      console.log("Bin color: " + this.color);
+      console.log("Bomb color: " + bomb.color);
       if (this.color === bomb.color) {
         this.managerGame.bombsInBins.push(bomb);
         this.managerGame.removeBomb(bomb, true);

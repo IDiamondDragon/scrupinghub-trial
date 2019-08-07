@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { BombSettings } from '../../models/classes/bomb-settings';
+import { EmitBombAction, StoppedGameAction } from 'src/app/reducers/app.actions';
+import { Store } from '@ngrx/store';
+import { State } from '../../reducers/index';
+import { CurrentCountdownTimeAction, CurrentPointsAction } from '../../reducers/app.actions';
+import { BombSettingsCreatorService } from './bomb-settings-creator.service';
+import { ColorGeneratorService } from './color-generator.service';
 
 
 @Injectable()
@@ -18,26 +23,13 @@ export class ManagerGame {
     passedTimeEmitBomb: number = 0;
     startedCountdownTime: number = 40; // in sec
     passedCountdownTime: number = this.startedCountdownTime;
-    colorBins: string[] = [];
     idBins: string[] = ['bin1', 'bin2', 'bin3'];
     countEmitedBombs = 0;
     countEmitedBombsFinishGame = 120;
 
-    private _emitBomb = new BehaviorSubject<boolean>(false);
-    private _currentCountdownTime = new BehaviorSubject<number>(this.startedCountdownTime);
     private _changeColorBins = new BehaviorSubject<boolean>(true);
     private _changeColorBombs = new BehaviorSubject<boolean>(true);
-    private _currentPoints = new BehaviorSubject<number>(0);
-    private _stoppedGame = new BehaviorSubject<boolean>(false);
     private _settedBaseSizeBins = new BehaviorSubject<boolean>(false);
-
-    public get emitBomb(): Observable<boolean> {
-      return this._emitBomb;
-    }
-
-    public get currentCountdownTime(): Observable<number> {
-      return this._currentCountdownTime;
-    }
 
     public get changeColorBins(): Observable<boolean> {
       return this._changeColorBins;
@@ -47,20 +39,13 @@ export class ManagerGame {
       return this._changeColorBombs;
     }
 
-    public get currentPoints(): Observable<number> {
-      return this._currentPoints;
-    }
-
-    public get stoppedGame(): Observable<boolean> {
-      return this._stoppedGame;
-    }
-
     public get settedBaseSizeBins(): Observable<boolean> {
       return this._settedBaseSizeBins;
     }
 
-
-    constructor() {
+    constructor(private store: Store<State>,
+                private bombSettingsCreatorService: BombSettingsCreatorService,
+                private colorGeneratorService: ColorGeneratorService) {
       this.startGame();
     }
 
@@ -79,19 +64,21 @@ export class ManagerGame {
       }
 
       if (this.passedTimeEmitBomb >= this.emitBombEvery && this.countEmitedBombs < this.countEmitedBombsFinishGame) {
-        this._emitBomb.next(true);
+
+        this.store.dispatch(new EmitBombAction(this.bombSettingsCreatorService.create()));
 
         this.passedTimeEmitBomb = 0;
         this.countEmitedBombs += 1;
       }
 
       if (this.passedCountdownTime % 1 === 0) {
-        this._currentCountdownTime.next(this.passedCountdownTime);
+        this.store.dispatch(new CurrentCountdownTimeAction(this.passedCountdownTime));
       }
 
       if (this.passedCountdownTime === 0) {
         this.passedCountdownTime = this.startedCountdownTime;
-        this.colorBins = [];
+        this.colorGeneratorService.colorBins = [];
+
         this._changeColorBins.next(true);
       }
     }
@@ -102,8 +89,8 @@ export class ManagerGame {
 
     stopGame() {
        clearInterval(this.timerId);
-       this._currentCountdownTime.next(0);
-       this._stoppedGame.next(true);
+       this.store.dispatch(new CurrentCountdownTimeAction(0));
+       this.store.dispatch(new StoppedGameAction(true));
     }
 
     updateBombsColor() {
@@ -125,6 +112,6 @@ export class ManagerGame {
         this.points -= 1;
       }
 
-      this._currentPoints.next(this.points);
+      this.store.dispatch(new CurrentPointsAction(this.points));
     }
 }
