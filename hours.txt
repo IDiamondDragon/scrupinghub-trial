@@ -1,0 +1,3 @@
+research: 2 hours;
+implementation: 10 hours;
+testing and fixing bugs: 4 hours;
